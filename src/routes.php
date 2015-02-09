@@ -3,145 +3,145 @@
 /**
  * Routes
  */
-Route::group(array('prefix' => Config::get('administrator::administrator.uri'), 'before' => 'validate_admin'), function()
+$router->group(array('prefix' => Config::get('administrator::administrator.uri'), 'before' => 'validate_admin'), function($router)
 {
 	//Admin Dashboard
-	Route::get('/', array(
+	$router->get('/', array(
 		'as' => 'admin_dashboard',
-		'uses' => 'Frozennode\Administrator\AdminController@dashboard',
+		'uses' => 'AdminController@dashboard',
 	));
 
 	//File Downloads
-	Route::get('file_download', array(
+	$router->get('file_download', array(
 		'as' => 'admin_file_download',
-		'uses' => 'Frozennode\Administrator\AdminController@fileDownload'
+		'uses' => 'AdminController@fileDownload'
 	));
 
 	//Custom Pages
-	Route::get('page/{page}', array(
+	$router->get('page/{page}', array(
 		'as' => 'admin_page',
-		'uses' => 'Frozennode\Administrator\AdminController@page'
+		'uses' => 'AdminController@page'
 	));
 
-	Route::group(array('before' => 'validate_settings|post_validate'), function()
+	$router->group(array('before' => 'validate_settings|post_validate'), function($router)
 	{
 		//Settings Pages
-		Route::get('settings/{settings}', array(
+		$router->get('settings/{settings}', array(
 			'as' => 'admin_settings',
-			'uses' => 'Frozennode\Administrator\AdminController@settings'
+			'uses' => 'AdminController@settings'
 		));
 
 		//Display a settings file
-		Route::get('settings/{settings}/file', array(
+		$router->get('settings/{settings}/file', array(
 			'as' => 'admin_settings_display_file',
-			'uses' => 'Frozennode\Administrator\AdminController@displayFile'
+			'uses' => 'AdminController@displayFile'
 		));
 
 		//CSRF routes
-		Route::group(array('before' => 'csrf'), function()
+		$router->group(array('before' => 'csrf'), function($router)
 		{
 			//Save Item
-			Route::post('settings/{settings}/save', array(
+			$router->post('settings/{settings}/save', array(
 				'as' => 'admin_settings_save',
-				'uses' => 'Frozennode\Administrator\AdminController@settingsSave'
+				'uses' => 'AdminController@settingsSave'
 			));
 
 			//Custom Action
-			Route::post('settings/{settings}/custom_action', array(
+			$router->post('settings/{settings}/custom_action', array(
 				'as' => 'admin_settings_custom_action',
-				'uses' => 'Frozennode\Administrator\AdminController@settingsCustomAction'
+				'uses' => 'AdminController@settingsCustomAction'
 			));
 		});
         
 		//Settings file upload
-		Route::post('settings/{settings}/{field}/file_upload', array(
+		$router->post('settings/{settings}/{field}/file_upload', array(
 			'as' => 'admin_settings_file_upload',
-			'uses' => 'Frozennode\Administrator\AdminController@fileUpload'
+			'uses' => 'AdminController@fileUpload'
 		));
 	});
 
 	//Switch locales
-	Route::get('switch_locale/{locale}', array(
+	$router->get('switch_locale/{locale}', array(
 		'as' => 'admin_switch_locale',
-		'uses' => 'Frozennode\Administrator\AdminController@switchLocale'
+		'uses' => 'AdminController@switchLocale'
 	));
 
 	//The route group for all other requests needs to validate admin, model, and add assets
-	Route::group(array('before' => 'validate_model|post_validate'), function()
+	$router->group(array('before' => 'validate_model|post_validate'), function($router)
 	{
 		//Model Index
-		Route::get('{model}', array(
+		$router->get('{model}', array(
 			'as' => 'admin_index',
-			'uses' => 'Frozennode\Administrator\AdminController@index'
+			'uses' => 'AdminController@index'
 		));
 
 		//New Item
-		Route::get('{model}/new', array(
+		$router->get('{model}/new', array(
 			'as' => 'admin_new_item',
-			'uses' => 'Frozennode\Administrator\AdminController@item'
+			'uses' => 'AdminController@item'
 		));
 
 		//Update a relationship's items with constraints
-		Route::post('{model}/update_options', array(
+		$router->post('{model}/update_options', array(
 			'as' => 'admin_update_options',
-			'uses' => 'Frozennode\Administrator\AdminController@updateOptions'
+			'uses' => 'AdminController@updateOptions'
 		));
 
 		//Display an image or file field's image or file
-		Route::get('{model}/file', array(
+		$router->get('{model}/file', array(
 			'as' => 'admin_display_file',
-			'uses' => 'Frozennode\Administrator\AdminController@displayFile'
+			'uses' => 'AdminController@displayFile'
 		));
 
 		//Updating Rows Per Page
-		Route::post('{model}/rows_per_page', array(
+		$router->post('{model}/rows_per_page', array(
 			'as' => 'admin_rows_per_page',
-			'uses' => 'Frozennode\Administrator\AdminController@rowsPerPage'
+			'uses' => 'AdminController@rowsPerPage'
 		));
 
 		//Get results
-		Route::post('{model}/results', array(
+		$router->post('{model}/results', array(
 			'as' => 'admin_get_results',
-			'uses' => 'Frozennode\Administrator\AdminController@results'
+			'uses' => 'AdminController@results'
 		));
 
 		//Custom Model Action
-		Route::post('{model}/custom_action', array(
+		$router->post('{model}/custom_action', array(
 			'as' => 'admin_custom_model_action',
-			'uses' => 'Frozennode\Administrator\AdminController@customModelAction'
+			'uses' => 'AdminController@customModelAction'
 		));
 
 		//Get Item
-		Route::get('{model}/{id}', array(
+		$router->get('{model}/{id}', array(
 			'as' => 'admin_get_item',
-			'uses' => 'Frozennode\Administrator\AdminController@item'
+			'uses' => 'AdminController@item'
 		));
 
 		//File Uploads
-		Route::post('{model}/{field}/file_upload', array(
+		$router->post('{model}/{field}/file_upload', array(
 			'as' => 'admin_file_upload',
-			'uses' => 'Frozennode\Administrator\AdminController@fileUpload'
+			'uses' => 'AdminController@fileUpload'
 		));
 
 		//CSRF protection in forms
-		Route::group(array('before' => 'csrf'), function()
+		$router->group(array('before' => 'csrf'), function($router)
 		{
 			//Save Item
-			Route::post('{model}/{id?}/save', array(
+			$router->post('{model}/{id?}/save', array(
 				'as' => 'admin_save_item',
-				'uses' => 'Frozennode\Administrator\AdminController@save'
+				'uses' => 'AdminController@save'
 			));
 
 			//Delete Item
-			Route::post('{model}/{id}/delete', array(
+			$router->post('{model}/{id}/delete', array(
 				'as' => 'admin_delete_item',
-				'uses' => 'Frozennode\Administrator\AdminController@delete'
+				'uses' => 'AdminController@delete'
 			));
 
 			//Custom Item Action
-			Route::post('{model}/{id}/custom_action', array(
+			$router->post('{model}/{id}/custom_action', array(
 				'as' => 'admin_custom_model_item_action',
-				'uses' => 'Frozennode\Administrator\AdminController@customModelItemAction'
+				'uses' => 'AdminController@customModelItemAction'
 			));
 		});
 	});
