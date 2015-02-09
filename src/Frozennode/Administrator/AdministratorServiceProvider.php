@@ -44,7 +44,12 @@ class AdministratorServiceProvider extends ServiceProvider {
 		//include our filters, view composers, and routes
 		include __DIR__.'/../../filters.php';
 		include __DIR__.'/../../viewComposers.php';
-		include __DIR__.'/../../routes.php';
+		
+		$router = $this->app['router'];
+
+		$router->group(['namespace' => 'Frozennode\Administrator'], function($router) {
+			include __DIR__.'/../../routes.php';
+		});
 
 		$this->app['events']->fire('administrator.ready');
 	}
